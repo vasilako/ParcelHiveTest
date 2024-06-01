@@ -24,3 +24,16 @@ c.execute('''CREATE TABLE IF NOT EXISTS mouse_data
 c.execute('''CREATE TABLE IF NOT EXISTS images
              (image BLOB, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
 c.commit()
+
+
+# Esta funcción leerá los datos del pueto serial
+def serial_reader():
+    while True:
+        if ser.in_waiting > 0:
+            line = ser.readline().decode('utf-8').rstrip()
+            x, y = map(int, line.split(','))
+            socketio.emit('mouse_position', {'x': x, 'y': y})
+            c.execute("INSERT INTO mouse_data (x, y) VALUES (?, ?)", (x, y))
+            conn.commit()
+
+threading.Thread(target=serial_reader).start()
