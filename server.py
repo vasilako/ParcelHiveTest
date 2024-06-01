@@ -37,3 +37,25 @@ def serial_reader():
             conn.commit()
 
 threading.Thread(target=serial_reader).start()
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@socketio.on('take_ficture')
+def take_ficture(data):
+    cap = cv2.VideoCapture(0)
+    ret, frame = cap.read()
+    cap.release()
+
+    if ret:
+        _, buffer = cv2.imencode('.jpg', frame)
+        image_base64 = base64.b64encode(buffer).decode('utf-8')
+        c.execute("INSERT INTO images (image) VALUES (?)", (buffer.tobytes(),))
+        conn.commit()
+        emit('picture', {'image': image_base64})
+
+
+
+if __name__ == '__main__':
+    socketio.run(app, debug=True)
