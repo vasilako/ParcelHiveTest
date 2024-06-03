@@ -61,29 +61,10 @@ def serve_image(filename):
     return send_from_directory('images', filename)
 
 
-# @socketio.on('take_picture')
-# def take_picture(data):  # Cambié el nombre de la función a 'take_picture' para que coincida con el evento
-#     cap = cv2.VideoCapture(0)
-#     ret, frame = cap.read()
-#     cap.release()
-#
-#     if ret:
-#         _, buffer = cv2.imencode('.jpg', frame)
-#         image_base64 = base64.b64encode(buffer).decode('utf-8')
-#         c.execute("INSERT INTO images (image) VALUES (?)", (buffer.tobytes(),))
-#         conn.commit()
-#         emit('picture', {'image': image_base64})
-#         print(frame.dtype)
-#
-#     else:
-#         print("Failed to capture image")
-
-
-
 @socketio.on('take_picture')
 def take_picture(data):
     cap = cv2.VideoCapture(0)
-    time.sleep(2)
+    time.sleep(1)
     ret, frame = cap.read()
     cap.release()
 
@@ -95,7 +76,7 @@ def take_picture(data):
         # Formatear image path
         now = dt.datetime.now()
         date_time_format = "%Y-%m-%d-%H-%M-%S"
-        image_path = f"images/imagen{now.strftime(date_time_format)}.jpg"
+        image_path = f"images/image{now.strftime(date_time_format)}.jpg"
 
         # Guardar la imagen en el servidor
         cv2.imwrite(image_path, frame)
