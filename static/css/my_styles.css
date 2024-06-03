@@ -1,0 +1,8 @@
+
+/* Ajustar la imagen al ancho de la pantalla*/
+#webcam-image {
+            width: 100%;
+            height: auto; /* Mantiene la proporción de la imagen */
+            display: block; /* Elimina el pequeño espacio debajo de la imagen */
+            margin: 0 auto; /* Centra la imagen horizontalmente */
+        }
