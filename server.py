@@ -1,9 +1,9 @@
 from flask import Flask, render_template, send_from_directory
 from flask_socketio import SocketIO, emit
-import threading
-import cv2
-import sqlite3
 import serial
+import cv2
+import threading
+import sqlite3
 import datetime as dt
 import time
 import logging
