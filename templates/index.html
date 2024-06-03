@@ -4,11 +4,16 @@
     <title>Mouse Tracker</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/my_styles.css') }}">
+
+
 </head>
 <body>
     <h1>Mouse Tracker</h1>
+     <div id="loader"></div>
     <div id="mouse-info"></div>
-    <img id="webcam-image" src="" alt="Webcam Image">
+    <img class="base-image" id="webcam-image" src="/images/base-image.jpg" alt="Webcam Image">
+
 
     <script>
         $(document).ready(function() {
@@ -33,10 +38,22 @@
                 var y = event.clientY;
                 socket.emit('click', {x: x, y: y});
                 socket.emit('take_picture', {});  // Emitir el evento 'take_picture'
+                $('#loader').show()
             });
 
             socket.on('picture', function(data) {
                 $('#webcam-image').attr('src', 'data:image/jpeg;base64,' + data.image);
+                let image = $('#webcam-image')
+
+                image.attr('src', data.url);
+                console.log(image.attr.src)
+
+                if (image.attr.src !== "/images/base-image.jpg") {
+                     image.addClass('take-picture');
+                }
+            $('#loader').hide(); // Ocultar el loader
+
+
             });
         });
     </script>

@@ -1,0 +1,45 @@
+
+/* Ajustar la imagen al ancho de la pantalla*/
+.take-picture {
+            width: 100%;
+            height: auto; /* Mantiene la proporción de la imagen */
+            display: block; /* Elimina el pequeño espacio debajo de la imagen */
+            margin: 0 auto; /* Centra la imagen horizontalmente */
+        }
+.base-image{
+    height: auto;
+            display: block;
+            margin: 0 auto;
+}
+
+#loader {
+    /* Estilos para centrar el loader */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999; /* Asegúrate de que esté en el frente */
+    /* Estilos adicionales */
+    background-color: rgba(255, 255, 255, 0.4); /* Fondo semi-transparente */
+    padding: 20px;
+    border-radius: 50%;
+    display: none; /* Inicialmente oculto */
+}
+
+/* Animación opcional */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loader::after {
+    content: '';
+    display: block;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 80%;
+    border: 3px solid #ccc;
+    border-top-color: #333;
+    animation: spin 1s linear infinite; /* Animación de rotación */
+}
