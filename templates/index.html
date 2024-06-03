@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mouse Tracker</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Mouse Tracker</h1>
+    <div id="mouse-info"></div>
+    <img id="webcam-image" src="" alt="Webcam Image">
+
+    <script>
+        $(document).ready(function() {
+            var socket = io();
+
+            socket.on('connect', function() {
+                console.log('Connected to server');
+            });
+
+            socket.on('mouse_position', function(data) {
+                $('#mouse-info').text('X: ' + data.x + ' Y: ' + data.y);
+            });
+
+            $(document).mousemove(function(event) {
+                var x = event.clientX;
+                var y = event.clientY;
+                socket.emit('movemouse', {x: x, y: y});
+            });
+
+            document.addEventListener("click", function(event) {
+                var x = event.clientX;
+                var y = event.clientY;
+                socket.emit('click', {x: x, y: y});
+                socket.emit('take_picture', {});  // Emitir el evento 'take_picture'
+            });
+
+            socket.on('picture', function(data) {
+                $('#webcam-image').attr('src', 'data:image/jpeg;base64,' + data.image);
+            });
+        });
+    </script>
+</body>
+</html>
