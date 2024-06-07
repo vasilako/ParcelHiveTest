@@ -163,8 +163,8 @@ cython_debug/
 .DS_Store
 my_sqlite.sqlite
 # Exclude image files
-images/*
-!images/base-image.jpg
+static/images/*
+!static/images/base-image.jpg
 
 # Include folder structure
-!images/
+!static/images/

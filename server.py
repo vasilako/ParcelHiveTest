@@ -23,8 +23,8 @@ database_url = os.getenv("DATABASE_URL")
 # Verifica si la variable de entorno está configurada
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://db_pictures_sockets_app_user:p8nWGyd0yVYosMDqWSudtNLGZTiDNrT7@dpg-cpeugqf109ks73fl2s3g-a.oregon-postgres.render.com/db_pictures_sockets_app"
-# app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://db_pictures_sockets_app_user:p8nWGyd0yVYosMDqWSudtNLGZTiDNrT7@dpg-cpeugqf109ks73fl2s3g-a.oregon-postgres.render.com/db_pictures_sockets_app"
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Optional, but recommended to suppress warnings
 print(app.config['SQLALCHEMY_DATABASE_URI'])
 
@@ -102,7 +102,7 @@ def index():
 
 @app.route('/images/<path:filename>')
 def serve_image(filename):
-    return send_from_directory('images', filename)
+    return send_from_directory('static/images', filename)
 
 
 @socketio.on('take_picture')
