@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:sqlite:my_sqlite.sqlite</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="db_pictures_sockets_app@dpg-cpeugqf109ks73fl2s3g-a.oregon-postgres.render.com" uuid="170aa98b-7eaa-4959-8338-4f1f4255e14d">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://dpg-cpeugqf109ks73fl2s3g-a.oregon-postgres.render.com/db_pictures_sockets_app</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
