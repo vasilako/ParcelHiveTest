@@ -8,6 +8,8 @@ import cv2
 import threading
 import time
 import base64
+import sys
+import glob
 
 
 
@@ -21,8 +23,8 @@ database_url = os.getenv("DATABASE_URL")
 # Verifica si la variable de entorno está configurada
 print(database_url)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://db_pictures_sockets_app_user:p8nWGyd0yVYosMDqWSudtNLGZTiDNrT7@dpg-cpeugqf109ks73fl2s3g-a.oregon-postgres.render.com/db_pictures_sockets_app"
-# app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://db_pictures_sockets_app_user:p8nWGyd0yVYosMDqWSudtNLGZTiDNrT7@dpg-cpeugqf109ks73fl2s3g-a.oregon-postgres.render.com/db_pictures_sockets_app"
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Optional, but recommended to suppress warnings
 print(app.config['SQLALCHEMY_DATABASE_URI'])
 
@@ -32,10 +34,39 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 # Configurar la conexión serial
-serial_port = '/dev/tty.Bluetooth-Incoming-Port'
+def serial_ports():
+    """ Lists serial port names
+
+        :raises EnvironmentError:
+            On unsupported or unknown platforms
+        :returns:
+            A list of the serial ports available on the system
+    """
+    if sys.platform.startswith('win'):
+        ports = ['COM%s' % (i + 1) for i in range(256)]
+    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        # this excludes your current terminal "/dev/tty"
+        ports = glob.glob('/dev/tty[A-Za-z]*')
+    elif sys.platform.startswith('darwin'):
+        ports = glob.glob('/dev/tty.*')
+    else:
+        raise EnvironmentError('Unsupported platform')
+
+    result = []
+    for port in ports:
+        try:
+            s = serial.Serial(port)
+            s.close()
+            result.append(port)
+        except (OSError, serial.SerialException):
+            pass
+    return result
+
+
+serial_port = serial_ports()
 baud_rate = 9600
 try:
-    ser = serial.Serial(serial_port, baud_rate)
+    ser = serial.Serial(serial_port[0], baud_rate)
     print(f"Serial port {serial_port} opened successfully.")
 except serial.SerialException as e:
     print(f"Error opening serial port {serial_port}: {e}")
